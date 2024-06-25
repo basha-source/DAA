@@ -1,0 +1,47 @@
+import sys
+
+def dijkstra(graph, source):
+    n = len(graph)
+    dist = [sys.maxsize] * n
+    dist[source] = 0
+    visited = [False] * n
+    
+    for _ in range(n):
+        # Find the vertex with the minimum distance from the set of vertices not yet processed
+        u = min_distance(dist, visited)
+        
+        # Mark the picked vertex as processed
+        visited[u] = True
+        
+        # Update dist value of the adjacent vertices of the picked vertex
+        for v in range(n):
+            if (not visited[v] and graph[u][v] and dist[u] != sys.maxsize and dist[u] + graph[u][v] < dist[v]):
+                dist[v] = dist[u] + graph[u][v]
+    
+    return dist
+
+def min_distance(dist, visited):
+    min_val = sys.maxsize
+    min_index = -1
+    
+    for v in range(len(dist)):
+        if dist[v] < min_val and not visited[v]:
+            min_val = dist[v]
+            min_index = v
+            
+    return min_index
+
+# Test case
+n = 5
+Infinity = sys.maxsize
+graph = [
+    [0, 10, 3, Infinity, Infinity],
+    [Infinity, 0, 1, 2, Infinity],
+    [Infinity, 4, 0, 8, 2],
+    [Infinity, Infinity, Infinity, 0, 7],
+    [Infinity, Infinity, Infinity, 9, 0]
+]
+source = 0
+
+# Expected Output: [0, 7, 3, 9, 5]
+print(dijkstra(graph, source))
